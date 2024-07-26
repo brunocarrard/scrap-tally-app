@@ -27,7 +27,6 @@ export default {
     },
     watch: {
         modelValue(newValue) {
-            console.log(newValue.description)
             if (typeof newValue.description === '') this.searchTerm = this.options.find(option => { option.id == newValue.id }).description
             this.searchTerm = newValue.description;
         },
@@ -37,7 +36,6 @@ export default {
             this.filteredOptions = this.options.filter((option) =>
                 option.description.toLowerCase().includes(this.searchTerm.toLowerCase())
             );
-            console.log(this.modelValue)
             this.$emit("update:modelValue", this.modelValue);
         },
         selectOption(option) {

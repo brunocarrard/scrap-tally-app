@@ -150,7 +150,6 @@ export const gettersStore = defineStore("getters", {
                         user_code: payload.userCode
                     }
                 });
-                console.log(response.data)
                 this.$patch({ _page: response.data.page })
                 this.$patch({ _lastPage: response.data.last_page })
                 return response

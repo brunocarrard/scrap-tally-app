@@ -21,7 +21,6 @@ export const scrapTallyStore = defineStore("scrapTally", {
             }
         },
         async deleteScrap(payload) {
-            console.log(payload)
             try {
                 const response = await axios.delete('http://127.0.0.1:5000/scrap-tally', {
                     headers: {

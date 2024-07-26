@@ -57,7 +57,6 @@ export default {
             await gettersStore().getScrapTally({ page: this.page, userCode: this.filteredUser })
             this.scraps = gettersStore()._page
             this.lastPage = gettersStore()._lastPage
-            console.log(this.scraps)
             this.loading = false
         } catch (error) {
             return error
@@ -68,7 +67,6 @@ export default {
             this.selectedScrap = scrap
             this.deleting = true
             this.modal = true
-            console.log(scrap)
         },
         updateScrap(scrap) {
             this.selectedScrap = scrap
@@ -87,7 +85,6 @@ export default {
                 await gettersStore().getScrapTally({ page: this.page, userCode: this.filteredUser })
                 this.scraps = gettersStore()._page
                 this.lastPage = gettersStore()._lastPage
-                console.log(gettersStore()._lastPage)
                 this.loadingTable = false
             } catch (error) {
                 this.filterUser(user)
@@ -106,7 +103,6 @@ export default {
             }
         },
         async updateTable() {
-            console.log('amigoestoaqi')
             this.closeModal()
             this.loadingTable = true
             this.page = 1
@@ -127,7 +123,6 @@ export default {
                 await gettersStore().getScrapTally({ page: this.page, userCode: user })
                 this.scraps = gettersStore()._page
                 this.lastPage = gettersStore()._lastPage
-                console.log(gettersStore()._lastPage)
                 this.loadingTable = false
             } catch (error) {
                 this.filterUser(user)

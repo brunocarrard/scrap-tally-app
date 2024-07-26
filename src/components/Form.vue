@@ -12,7 +12,7 @@
       </button>
     </div>
   </div>
-  <div v-if="!deleting" class="w-1/4 py-6 bg-black px-4 rounded-xl   border-4 border-red-500 absolute">
+  <div v-if="!deleting" class="w-1/4 py-6 bg-black px-4 rounded-xl   border-4 border-red-500 ">
     <i v-html="closeIcon" class="absolute top-0 left-1/2 pl-24 pt-6 cursor-pointer" @click="$emit('closeModal')"></i>
     <div v-if="loading">
       <label class="animate-pulse text-4xl">Loading...</label>
@@ -122,7 +122,6 @@ export default {
       try {
         await this.initializeOptions()
       } finally {
-        console.log('amigo estoaqi')
         this.selectedUser = this.selectedScrap.user
         this.selectedProcess = this.selectedScrap.process
         this.selectedMachine = this.selectedScrap.machine
@@ -164,11 +163,8 @@ export default {
     },
     machinesProcessWatcher: {
       handler(newVal, oldVal) {
-        console.log({ processLength: !Object.keys(this.selectedProcess).length === 0, processDefectType: !Object.keys(this.selectedDefectType).length === 0 })
-        console.log({ result: !(Object.keys(this.selectedProcess).length === 0) && !(Object.keys(this.selectedDefectType).length === 0) })
         if (!(Object.keys(this.selectedProcess).length === 0) && !(Object.keys(this.selectedDefectType).length === 0)) {
           this.getDefectConditions(this.selectedProcess, this.selectedDefectType);
-
         }
       },
       deep: true
@@ -219,7 +215,6 @@ export default {
       }
       try {
         let response = await scrapTallyStore().deleteScrap(payload)
-        console.log(response)
         toastify('success', response.data)
         this.$emit('updateTable')
       } catch (error) {
@@ -245,7 +240,6 @@ export default {
         payload.scrapTally = this.selectedScrap.scrapTally
         try {
           let response = await scrapTallyStore().updateScrap(payload)
-          console.log(response)
           toastify('success', response.data)
           this.$emit('updateTable')
         } catch (error) {
@@ -256,7 +250,6 @@ export default {
       } else {
         try {
           let response = await scrapTallyStore().postScrap(payload)
-          console.log(response)
           toastify('success', response.data)
           // this.$emit('updateTable')
         } catch (error) {
