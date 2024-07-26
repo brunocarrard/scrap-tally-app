@@ -1,11 +1,24 @@
+/** @type {import('tailwindcss').Config} */
 export default {
-    purge: ["./index.html", "./src/**/*/{vue, js, ts, jsx, tsx}"],
-    darkMode: false,
+    content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
     theme: {
-        extend: {}
-    },
-    variants: {
-        extend: {}
+      extend: {
+        colors: {
+          grey: 'rgb(37, 39, 46)',
+          lightGrey: '#525767'
+        },
+        height: {
+          tablet: '768px'
+        },
+        spacing: {
+          'cel': '500px',
+        },
+        width: {
+          '95': '96%'
+        }
+      },
     },
     plugins: [],
-}
+  }
+  
+  
