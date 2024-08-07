@@ -26,16 +26,26 @@
                     <td class="col-span-1 "> {{ formatDate(scrap.date) }} </td>
                     <td class="col-span-1 "> {{ scrap.process.description }} </td>
                     <td class="col-span-1 "> {{ scrap.machine.description }} </td>
-                    <td class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis"> {{ scrap.part.id }} / {{
-                        scrap.part.description }}
+                    <td
+                        class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.part.id }} / {{
+                            scrap.part.description }}
                     </td>
                     <td class="col-span-1 "> {{ scrap.fullSheetInd ? 'Yes' : 'No' }} </td>
                     <td class="col-span-1 "> {{ scrap.qty }} </td>
-                    <td class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis"> {{
-                        scrap.defectType.description }} </td>
-                    <td class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis"> {{
-                        scrap.defectCondition.description }} </td>
-                    <td class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis"> {{ scrap.comment }} </td>
+                    <td
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.defectType.description }} </td>
+                    <td
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.defectCondition.description }} </td>
+                    <td
+                        class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.comment }} </td>
                     <td class="col-span-1 flex items-center justify-around">
                         <i class="cursor-pointer" v-html="updateIcon" @click="$emit('updateScrap', scrap)"></i>
                         <i class="cursor-pointer" v-html="litterBox" @click="$emit('deleteScrap', scrap)"></i>
