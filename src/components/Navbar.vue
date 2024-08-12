@@ -4,7 +4,8 @@
             <label>Operator:</label>
             <div class="flex gap-4 items-center">
                 <Combobox :options="users" v-model="selectedOption" />
-                <button @click="$emit('clear')" class="w-5 h-5 bg-white"></button>
+                <button @click="clear()" class="w-6 h-5 bg-white flex items-center justify-center rounded-full"><i
+                        class="cursor-pointer" v-html="eraseIcon"></i></button>
             </div>
 
 
@@ -17,6 +18,7 @@
 </template>
 
 <script>
+import { eraseIcon } from '../assets/index.js';
 import Combobox from './Combobox.vue'
 export default {
     props: {
@@ -27,7 +29,8 @@ export default {
     },
     data() {
         return {
-            selectedOption: {}
+            selectedOption: {},
+            eraseIcon
         }
     },
     watch: {
@@ -36,7 +39,13 @@ export default {
                 this.$emit('filterUser', this.selectedOption.id);
             },
             deep: true
-        },
+        }
+    },
+    methods: {
+        clear() {
+            this.$emit('clear');
+            this.selectedOption = {}
+        }
     }
 }
 </script>

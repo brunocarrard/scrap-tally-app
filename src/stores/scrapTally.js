@@ -35,3 +35,4 @@ export const scrapTallyStore = defineStore("scrapTally", {
         }
     }
 });
+// https://192.168.0.154:4040

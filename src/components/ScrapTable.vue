@@ -10,10 +10,11 @@
             <thead class="header">
                 <tr class="grid grid-cols-12">
                     <th class="col-span-1">Date</th>
+                    <th class="col-span-1">Operator</th>
                     <th class="col-span-1">Process</th>
                     <th class="col-span-1">Machine</th>
-                    <th class="col-span-2">Part</th>
-                    <th class="col-span-1">Full Sheet?</th>
+                    <th class="col-span-1">Produced Part</th>
+                    <th class="col-span-1">Raw Material</th>
                     <th class="col-span-1">Qty</th>
                     <th class="col-span-1">Defect Type</th>
                     <th class="col-span-1">Defect Condition</th>
@@ -24,15 +25,21 @@
             <tbody class="flex flex-col  auto">
                 <tr v-for=" scrap in scraps " class="grid grid-cols-12 transition-transform">
                     <td class="col-span-1 "> {{ formatDate(scrap.date) }} </td>
+                    <td class="col-span-1 "> {{ scrap.operator.description }} </td>
                     <td class="col-span-1 "> {{ scrap.process.description }} </td>
                     <td class="col-span-1 "> {{ scrap.machine.description }} </td>
                     <td
-                        class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
                         {{
-                            scrap.part.id }} / {{
-                            scrap.part.description }}
+                            scrap.producedPart.id }} / {{
+                            scrap.producedPart.description }}
                     </td>
-                    <td class="col-span-1 "> {{ scrap.fullSheetInd ? 'Yes' : 'No' }} </td>
+                    <td
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.rawMaterial.id }} / {{
+                            scrap.rawMaterial.description }}
+                    </td>
                     <td class="col-span-1 "> {{ scrap.qty }} </td>
                     <td
                         class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
@@ -47,8 +54,12 @@
                         {{
                             scrap.comment }} </td>
                     <td class="col-span-1 flex items-center justify-around">
-                        <i class="cursor-pointer" v-html="updateIcon" @click="$emit('updateScrap', scrap)"></i>
-                        <i class="cursor-pointer" v-html="litterBox" @click="$emit('deleteScrap', scrap)"></i>
+                        <i class="cursor-pointer" v-html="updateIcon" @click="$emit('updateScrap', scrap)"
+                            v-if="!scrap.processed"></i>
+                        <i v-html="dUpdateIcon" v-if="scrap.processed"></i>
+                        <i class="cursor-pointer" v-html="litterBox" @click="$emit('deleteScrap', scrap)"
+                            v-if="!scrap.processed"></i>
+                        <i v-html="dLitterBox" v-if="scrap.processed"></i>
                     </td>
                 </tr>
             </tbody>
@@ -64,6 +75,8 @@
 <script>
 import { litterBox } from '../assets/index.js';
 import { updateIcon } from '../assets/index.js';
+import { dLitterBox } from '../assets/index.js';
+import { dUpdateIcon } from '../assets/index.js';
 export default {
     props: {
         loading: Boolean,
@@ -74,83 +87,9 @@ export default {
     data() {
         return {
             litterBox,
-            updateIcon
-            // scraps: [
-            //     {
-            //         user: {
-            //             id: 'ABE',
-            //             description: 'Abe Hamm'
-            //         },
-            //         process: {
-            //             id: 'KNIF',
-            //             description: 'Knifing'
-            //         },
-            //         date: '2024/17/7',
-            //         machine: {
-            //             id: 'KNF1',
-            //             description: 'Knife 1'
-            //         },
-            //         part: {
-            //             id: '734-114-2614.LR',
-            //             description: 'Transit 130'
-            //         },
-            //         fullSheetInd: true,
-            //         qty: 4,
-            //         defectType: {
-            //             id: 0,
-            //             description: 'Internal - Processing Error'
-            //         },
-            //         defectCondition: {
-            //             id: 0,
-            //             description: 'Condition Example'
-            //         },
-            //         comment: 'Example of comment writed by user',
-            //     },
-            //     // {
-            //     //     date: '2024/17/7',
-            //     //     machine: 'Example Mach',
-            //     //     part: 'example-part-1',
-            //     //     materialType: 'Material Example',
-            //     //     fullSheetInd: 'Yes',
-            //     //     qty: 4,
-            //     //     defectType: 'Type Example',
-            //     //     defectCondition: 'Condition Example',
-            //     //     comment: 'Example of comment writed by user',
-            //     // },
-            //     // {
-            //     //     date: '2024/17/7',
-            //     //     machine: 'Example Mach',
-            //     //     part: 'example-part-1',
-            //     //     materialType: 'Material Example',
-            //     //     fullSheetInd: 'Yes',
-            //     //     qty: 4,
-            //     //     defectType: 'Type Example',
-            //     //     defectCondition: 'Condition Example',
-            //     //     comment: 'Example of comment writed by user',
-            //     // },
-            //     // {
-            //     //     date: '2024/17/7',
-            //     //     machine: 'Example Mach',
-            //     //     part: 'example-part-1',
-            //     //     materialType: 'Material Example',
-            //     //     fullSheetInd: 'Yes',
-            //     //     qty: 4,
-            //     //     defectType: 'Type Example',
-            //     //     defectCondition: 'Condition Example',
-            //     //     comment: 'Example of comment writed by user',
-            //     // },
-            //     // {
-            //     //     date: '2024/17/7',
-            //     //     machine: 'Example Mach',
-            //     //     part: 'example-part-1',
-            //     //     materialType: 'Material Example',
-            //     //     fullSheetInd: 'Yes',
-            //     //     qty: 4,
-            //     //     defectType: 'Type Example',
-            //     //     defectCondition: 'Condition Example',
-            //     //     comment: 'Example of comment writed by user',
-            //     // }
-            // ]
+            updateIcon,
+            dLitterBox,
+            dUpdateIcon
         }
     },
     methods: {

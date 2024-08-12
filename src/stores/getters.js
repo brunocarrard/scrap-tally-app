@@ -13,6 +13,7 @@ export const gettersStore = defineStore("getters", {
         _defectConditions: [],
         _defectTypes: [],
         _parts: [],
+        _rawMaterials: [],
         _page: [],
         _lastPage: false
       }),
@@ -142,6 +143,19 @@ export const gettersStore = defineStore("getters", {
                 throw error
             }
         },
+        async getRawMaterials(payload) {
+            try {
+                const response = await axios.get('http://127.0.0.1:5000/raw-materials', {
+                    params: {
+                        producedPart: payload
+                    }
+                });
+                this.$patch({ _rawMaterials: response.data })
+                return response
+            } catch (error) {
+                throw error
+            }
+        },
         async getScrapTally(payload) {
             try {
                 const response = await axios.get('http://127.0.0.1:5000/scrap-tally', {
@@ -167,3 +181,4 @@ export const gettersStore = defineStore("getters", {
         }
     }
 });
+// https://192.168.0.154:4040

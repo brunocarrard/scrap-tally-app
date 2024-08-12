@@ -20,7 +20,7 @@
     <div v-if="!loading" class="flex flex-col items-center justify-center gap-4">
       <h2 class="text-white font-bold w-52">Insert new Scrap</h2>
       <div class="flex flex-col gap-2">
-        <label>Select User:</label>
+        <label>Select Operator:</label>
         <Combobox :options="users" v-model="selectedUser" />
       </div>
       <div class="flex flex-col gap-2">
@@ -31,11 +31,15 @@
         <label>Select Machine:</label>
         <Combobox :options="machines" v-model="selectedMachine" />
       </div>
-      <div v-if="parts.length > 0" class="flex flex-col gap-2">
-        <label>Select Part:</label>
-        <Combobox :options="parts" v-model="selectedPart" />
+      <div v-if="producedParts.length > 0" class="flex flex-col gap-2">
+        <label>Select Produced Part:</label>
+        <Combobox :options="producedParts" v-model="selectedProducedPart" />
       </div>
-      <div class="flex gap-2 w-52">
+      <div v-if="rawMaterials.length > 0" class="flex flex-col gap-2">
+        <label>Select Raw Material:</label>
+        <Combobox :options="rawMaterials" v-model="selectedRawMaterial" />
+      </div>
+      <!-- <div class="flex gap-2 w-52">
 
         <label>Full Sheet?</label>
         <div class="flex gap-1">
@@ -43,7 +47,7 @@
           <label v-if="fullSheet">Yes</label>
           <label v-if="!fullSheet">No</label>
         </div>
-      </div>
+      </div> -->
       <div class="flex gap-2
       w-52">
         <label>Qty:</label>
@@ -97,14 +101,16 @@ export default {
       machines: [],
       defectTypes: [],
       defectConditions: [],
-      parts: [],
+      producedParts: [],
+      rawMaterials: [],
       qty: 0,
       selectedUser: {},
       selectedProcess: {},
       selectedMachine: {},
       selectedDefectType: {},
       selectedDefectCondition: {},
-      selectedPart: {},
+      selectedProducedPart: {},
+      selectedRawMaterial: {},
       fullSheet: false
     }
   },
@@ -122,14 +128,14 @@ export default {
       try {
         await this.initializeOptions()
       } finally {
-        this.selectedUser = this.selectedScrap.user
+        this.selectedUser = this.selectedScrap.operator
         this.selectedProcess = this.selectedScrap.process
         this.selectedMachine = this.selectedScrap.machine
         this.selectedDefectType = this.selectedScrap.defectType
         this.selectedDefectCondition = this.selectedScrap.defectCondition
-        this.selectedPart = this.selectedScrap.part
+        this.selectedProducedPart = this.selectedScrap.producedPart
+        this.selectedRawMaterial = this.selectedScrap.rawMaterial
         this.qty = this.selectedScrap.qty
-        this.fullSheet = this.selectedScrap.fullSheetInd
         this.comment = this.selectedScrap.comment
       }
     }
@@ -149,7 +155,8 @@ export default {
         !(Object.keys(this.selectedMachine).length === 0) &&
         !(Object.keys(this.selectedDefectType).length === 0) &&
         !(Object.keys(this.selectedDefectCondition).length === 0) &&
-        !(Object.keys(this.selectedPart).length === 0) &&
+        !(Object.keys(this.selectedProducedPart).length === 0) &&
+        !(Object.keys(this.selectedRawMaterial).length === 0) &&
         this.qty > 0) return true
       else return false
     }
@@ -168,6 +175,11 @@ export default {
         }
       },
       deep: true
+    },
+    selectedProducedPart: {
+      handler(newVal, oldVal) {
+        this.getRawMaterials(newVal.id)
+      }
     }
   },
   methods: {
@@ -177,11 +189,19 @@ export default {
       if ((Object.keys(this.selectedScrap).length === 0)) this.selectedMachine = {}
       try {
         await gettersStore().getParts(payload);
-        this.parts = gettersStore()._parts
+        this.producedParts = gettersStore()._parts
       } catch (error) {
         toastify('error', error.response.data.error)
       }
 
+    },
+    async getRawMaterials(payload) {
+      try {
+        await gettersStore().getRawMaterials(payload)
+        this.rawMaterials = gettersStore()._rawMaterials
+      } catch (error) {
+        toastify('error', error.response.data.error)
+      }
     },
     async getDefectConditions(process, defectType) {
       const payload = {
@@ -196,9 +216,15 @@ export default {
       this.machines = gettersStore()._machines
       try {
         await gettersStore().getParts(this.selectedScrap.process.id);
-        this.parts = gettersStore()._parts
+        this.producedParts = gettersStore()._parts
       } catch (error) {
-        this.parts = [this.selectedScrap.part]
+        this.producedParts = [this.selectedScrap.producedPart]
+      }
+      try {
+        await gettersStore().getRawMaterials(this.selectedScrap.producedPart.id)
+        this.rawMaterials = gettersStore()._rawMaterials
+      } catch (error) {
+        this.rawMaterials = [this.selectedScrap.rawMaterial]
       }
       const payload = {
         process: this.selectedScrap.process.id,
@@ -211,7 +237,7 @@ export default {
       this.posting = true
       const payload = {
         scrapTally: this.selectedScrap.scrapTally,
-        user: this.selectedScrap.user.id
+        user: this.selectedScrap.operator.id
       }
       try {
         let response = await scrapTallyStore().deleteScrap(payload)
@@ -227,9 +253,9 @@ export default {
       this.posting = true
       const payload = {
         machCode: this.selectedMachine.id,
-        partCode: this.selectedPart.id,
+        producedPart: this.selectedProducedPart.id,
+        rawMaterial: this.selectedRawMaterial.id,
         machGrpCode: this.selectedProcess.id,
-        fullSheetInd: this.fullSheet,
         qty: this.qty,
         defectCondition: this.selectedDefectCondition.description,
         defectType: this.selectedDefectType.description,
@@ -251,7 +277,7 @@ export default {
         try {
           let response = await scrapTallyStore().postScrap(payload)
           toastify('success', response.data)
-          // this.$emit('updateTable')
+          this.$emit('updateTable')
         } catch (error) {
           toastify('error', 'Scrap insert failed, please try again.')
         } finally {
