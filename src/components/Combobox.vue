@@ -1,6 +1,7 @@
 <template>
     <div class="combobox">
-        <input type="text" v-model="searchTerm" @input="onInput" placeholder="Search..." class="combobox-input" />
+        <input type="text" v-model="searchTerm" @input="onInput" placeholder="Search..."
+            class="combobox-input bg-white" />
         <ul v-if="filteredOptions.length" class="combobox-list">
             <li v-for="option in filteredOptions" :key="option.id" @click="selectOption(option)" class="combobox-item">
                 {{ option.description }}
@@ -57,6 +58,7 @@ export default {
     width: 100%;
     padding: 8px;
     box-sizing: border-box;
+    background: #716e6e
 }
 
 .combobox-list {

@@ -51,7 +51,7 @@
       <div class="flex gap-2
       w-52">
         <label>Qty:</label>
-        <input type="number" v-model="qty" class="w-20" />
+        <input type="number" v-model="qty" class="w-20 bg-formGrey" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Defect Type:</label>
@@ -63,7 +63,7 @@
       </div>
       <div class="flex flex-col gap-2">
         <label>Comment:</label>
-        <textarea v-model="comment" class="w-52" rows="4" />
+        <textarea v-model="comment" class="w-52 bg-formGrey" rows="4" />
       </div>
       <button @click="postScrap" :disabled="posting" v-if="isFilled"
         class="bg-white rounded w-52 mt-5 text-grey font-bold h-8">
