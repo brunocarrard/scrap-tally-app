@@ -1,5 +1,5 @@
 <template>
-    <div class="combobox">
+    <div :class="{ 'combobox': true, 'border-red-500': modelValue.description != searchTerm, 'border': true }">
         <input type="text" v-model="searchTerm" @input="onInput" placeholder="Search..."
             class="combobox-input bg-white" />
         <ul v-if="filteredOptions.length" class="combobox-list">
@@ -7,6 +7,8 @@
                 {{ option.description }}
             </li>
         </ul>
+        <p class="absolute z-0 text-sm text-red-500" v-if="modelValue.description != searchTerm">Must choose a valid
+            option.</p>
     </div>
 </template>
 
