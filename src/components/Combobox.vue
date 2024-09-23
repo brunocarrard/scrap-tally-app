@@ -4,6 +4,7 @@
             class="combobox-input bg-white" />
         <ul v-if="filteredOptions.length" class="combobox-list">
             <li v-for="option in filteredOptions" :key="option.id" @click="selectOption(option)" class="combobox-item">
+                <!-- {{ searchById ? `${option.id} // ${option.description}` : option.description }} -->
                 {{ option.description }}
             </li>
         </ul>
@@ -21,6 +22,7 @@ export default {
             required: true,
         },
         modelValue: Object,
+        searchById: Boolean
     },
     data() {
         return {
@@ -37,7 +39,7 @@ export default {
     methods: {
         onInput() {
             this.filteredOptions = this.options.filter((option) =>
-                option.description.toLowerCase().includes(this.searchTerm.toLowerCase())
+                this.searchById ? option.description.toLowerCase().includes(this.searchTerm.toLowerCase()) || option.id.toLowerCase().includes(this.searchTerm.toLowerCase()) : option.description.toLowerCase().includes(this.searchTerm.toLowerCase())
             );
             this.$emit("update:modelValue", this.modelValue);
         },

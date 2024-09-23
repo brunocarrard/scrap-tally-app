@@ -18,7 +18,8 @@
                     <th class="col-span-1">Qty</th>
                     <th class="col-span-1">Defect Type</th>
                     <th class="col-span-1">Defect Condition</th>
-                    <th class="col-span-2">Comment</th>
+                    <th class="col-span-1">Certificate/LotNr</th>
+                    <th class="col-span-1">Comment</th>
                     <th class="col-span-1 flex items-center justify-center">Options</th>
                 </tr>
             </thead>
@@ -50,7 +51,11 @@
                         {{
                             scrap.defectCondition.description }} </td>
                     <td
-                        class="col-span-2 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
+                        {{
+                            scrap.identity }} </td>
+                    <td
+                        class="col-span-1 overflow-hidden whitespace-nowrap text-ellipsis hover:text-wrap hover:text-clip">
                         {{
                             scrap.comment }} </td>
                     <td class="col-span-1 flex items-center justify-around">

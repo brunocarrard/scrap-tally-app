@@ -33,11 +33,15 @@
       </div>
       <div v-if="producedParts.length > 0" class="flex flex-col gap-2">
         <label>Select Produced Part:</label>
-        <Combobox :options="producedParts" v-model="selectedProducedPart" />
+        <Combobox :searchById="true" :options="producedParts" v-model="selectedProducedPart" />
       </div>
       <div v-if="rawMaterials.length > 0" class="flex flex-col gap-2">
         <label>Select Raw Material:</label>
-        <Combobox :options="rawMaterials" v-model="selectedRawMaterial" />
+        <Combobox :searchById="true" :options="rawMaterials" v-model="selectedRawMaterial" />
+      </div>
+      <div v-if="identities.length > 0" class="flex flex-col gap-2">
+        <label>Select Certificate/LotNr:</label>
+        <Combobox :options="identities" v-model="selectedIdentity" />
       </div>
       <!-- <div class="flex gap-2 w-52">
 
@@ -103,6 +107,7 @@ export default {
       defectConditions: [],
       producedParts: [],
       rawMaterials: [],
+      identities: [],
       qty: 0,
       selectedUser: {},
       selectedProcess: {},
@@ -111,6 +116,7 @@ export default {
       selectedDefectCondition: {},
       selectedProducedPart: {},
       selectedRawMaterial: {},
+      selectedIdentity: {},
       fullSheet: false
     }
   },
@@ -135,6 +141,7 @@ export default {
         this.selectedDefectCondition = this.selectedScrap.defectCondition
         this.selectedProducedPart = this.selectedScrap.producedPart
         this.selectedRawMaterial = this.selectedScrap.rawMaterial
+        this.selectedIdentity = { id: this.selectedScrap.identity, description: this.selectedScrap.identity }
         this.qty = this.selectedScrap.qty
         this.comment = this.selectedScrap.comment
       }
@@ -180,6 +187,11 @@ export default {
       handler(newVal, oldVal) {
         this.getRawMaterials(newVal.id)
       }
+    },
+    selectedRawMaterial: {
+      handler(newVal, oldVal) {
+        this.getIdentities(newVal.id)
+      }
     }
   },
   methods: {
@@ -199,6 +211,14 @@ export default {
       try {
         await gettersStore().getRawMaterials(payload)
         this.rawMaterials = gettersStore()._rawMaterials
+      } catch (error) {
+        toastify('error', error.response.data.error)
+      }
+    },
+    async getIdentities(payload) {
+      try {
+        await gettersStore().getIdentities(payload)
+        this.identities = gettersStore()._identities
       } catch (error) {
         toastify('error', error.response.data.error)
       }
@@ -225,6 +245,12 @@ export default {
         this.rawMaterials = gettersStore()._rawMaterials
       } catch (error) {
         this.rawMaterials = [this.selectedScrap.rawMaterial]
+      }
+      try {
+        await gettersStore().getIdentities(this.selectedScrap.producedPart.id)
+        this.identities = gettersStore()._identities
+      } catch (error) {
+        this.identities = [{ id: this.selectedScrap.identity, description: this.selectedScrap.identity }]
       }
       const payload = {
         process: this.selectedScrap.process.id,
@@ -260,6 +286,7 @@ export default {
         defectCondition: this.selectedDefectCondition.description,
         defectType: this.selectedDefectType.description,
         comment: this.comment,
+        identity: this.selectedIdentity.id ? this.selectedIdentity.id : '',
         user: this.selectedUser.id
       }
       if (!(Object.keys(this.selectedScrap).length === 0)) {

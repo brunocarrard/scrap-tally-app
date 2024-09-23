@@ -6,7 +6,7 @@ export const scrapTallyStore = defineStore("scrapTally", {
     actions: {
         async postScrap(payload) {
             try {
-                const response = await axios.post('http://127.0.0.1:5000/scrap-tally', payload, {})
+                const response = await axios.post('https://192.168.0.154:4040/scrap-tally', payload, {})
                 return response
             } catch(error) {
                 throw error
@@ -14,7 +14,7 @@ export const scrapTallyStore = defineStore("scrapTally", {
         },
         async updateScrap(payload) {
             try {
-                const response = await axios.patch('http://127.0.0.1:5000/scrap-tally', payload, {})
+                const response = await axios.patch('https://192.168.0.154:4040/scrap-tally', payload, {})
                 return response
             } catch(error) {
                 throw error
@@ -22,7 +22,7 @@ export const scrapTallyStore = defineStore("scrapTally", {
         },
         async deleteScrap(payload) {
             try {
-                const response = await axios.delete('http://127.0.0.1:5000/scrap-tally', {
+                const response = await axios.delete('https://192.168.0.154:4040/scrap-tally', {
                     headers: {
                         'Content-Type': 'application/json'
                     },

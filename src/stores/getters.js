@@ -15,12 +15,13 @@ export const gettersStore = defineStore("getters", {
         _parts: [],
         _rawMaterials: [],
         _page: [],
+        _identities: [],
         _lastPage: false
       }),
     actions: {
         async getUsers() {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/users');
+                const response = await axios.get('https://192.168.0.154:4040/users');
                 this.$patch({ _users: response.data })
                 return response
             } catch (error) {
@@ -37,7 +38,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getProcesses() {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/processes');
+                const response = await axios.get('https://192.168.0.154:4040/processes');
                 this.$patch({ _processes: response.data })
                 return response
             } catch (error) {
@@ -54,7 +55,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getDefectTypes() {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/defect-types');
+                const response = await axios.get('https://192.168.0.154:4040/defect-types');
 
                 this.$patch({ _defectTypes: response.data })
                 return response
@@ -72,7 +73,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getMachines(payload) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/machines', {
+                const response = await axios.get('https://192.168.0.154:4040/machines', {
                     params: {
                         process: payload
                     }
@@ -93,7 +94,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getDefectsConditions(payload) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/defect-conditions', {
+                const response = await axios.get('https://192.168.0.154:4040/defect-conditions', {
                     params: {
                         'process': payload.process,
                         'defect-type': payload.defectType
@@ -115,7 +116,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getDefectTypes() {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/defect-types');
+                const response = await axios.get('https://192.168.0.154:4040/defect-types');
                 this.$patch({ _defectTypes: response.data })
                 return response
             } catch (error) {
@@ -132,7 +133,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getParts(payload) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/parts', {
+                const response = await axios.get('https://192.168.0.154:4040/parts', {
                     params: {
                         process: payload
                     }
@@ -145,7 +146,7 @@ export const gettersStore = defineStore("getters", {
         },
         async getRawMaterials(payload) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/raw-materials', {
+                const response = await axios.get('https://192.168.0.154:4040/raw-materials', {
                     params: {
                         producedPart: payload
                     }
@@ -156,9 +157,22 @@ export const gettersStore = defineStore("getters", {
                 throw error
             }
         },
+        async getIdentities(payload) {
+            try {
+                const response = await axios.get('https://192.168.0.154:4040/part-identity', {
+                    params: {
+                        part: payload
+                    }
+                });
+                this.$patch({ _identities: response.data })
+                return response
+            } catch (error) {
+                throw error
+            }
+        },
         async getScrapTally(payload) {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/scrap-tally', {
+                const response = await axios.get('https://192.168.0.154:4040/scrap-tally', {
                     params: {
                         page: payload.page,
                         user_code: payload.userCode

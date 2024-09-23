@@ -84,6 +84,7 @@ export default {
             try {
                 await gettersStore().getScrapTally({ page: this.page, userCode: this.filteredUser })
                 this.scraps = gettersStore()._page
+                console.log(scraps)
                 this.lastPage = gettersStore()._lastPage
                 this.loadingTable = false
             } catch (error) {
